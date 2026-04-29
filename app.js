@@ -16,7 +16,7 @@ const TYPE_DEFINITIONS = {
   '8':  { label: 'Deux pistes unidirectionnelles protégées',                                     color: '#164e63', weight: 8, dashArray: null   },
 };
 
-const TYPE_ORDER = ['1a', '1b', '2a', '2b', '3a', '3b', '4a', '4b', '5', '6a', '6b', '7', '8'];
+const TYPE_ORDER = ['1a', '1b', '2a', '2b', '3a', '3b', '4a', '4b', '5a', '5b', '5c', '6a', '6b', '7', '8'];
 
 // ── Map setup ─────────────────────────────────────────────────────────────────
 
