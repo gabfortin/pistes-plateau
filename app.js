@@ -219,7 +219,7 @@ document.getElementById('file-input').addEventListener('change', (e) => {
 
 buildLegend();
 
-fetch('pistes.md')
+fetch('https://raw.githubusercontent.com/gabfortin/pistes-plateau/refs/heads/main/pistes.md')
   .then((r) => {
     if (!r.ok) throw new Error('not found');
     return r.text();
