@@ -7,7 +7,9 @@ const TYPE_DEFINITIONS = {
   '3b': { label: 'Vélo rue bidirectionnelle',                                                     color: '#1d4ed8', weight: 5, dashArray: null   },
   '4a': { label: 'Bande cyclable dans le sens des voitures seulement',                           color: '#d97706', weight: 4, dashArray: '12 4', arrow: true },
   '4b': { label: 'Bande cyclable à sens inverse seulement',                                      color: '#d97706', weight: 4, dashArray: '12 4', arrow: true },
-  '5':  { label: 'Bandes cyclables dans chaque direction',                                       color: '#eab308', weight: 4, dashArray: '12 4' },
+  '5a':  { label: 'Bandes cyclables dans chaque direction, collées sur stationnement',                                       color: '#eab308', weight: 4, dashArray: '12 4' },
+  '5b':  { label: 'Bandes cyclables dans chaque direction, avec espacement',                                       color: '#fff700', weight: 4, dashArray: '12 4' },
+  '5c':  { label: 'Bandes cyclables dans chaque direction, avec une certaine protection',                                       color: '#7dea08', weight: 4, dashArray: '12 4' },
   '6a': { label: 'Piste bidirectionnelle',                                                        color: '#16a34a', weight: 6, dashArray: null   },
   '6b': { label: 'Piste bidirectionnelle protégée',                                              color: '#14532d', weight: 8, dashArray: null   },
   '7':  { label: 'Piste unidirectionnelle protégée',                                             color: '#0891b2', weight: 6, dashArray: null,   arrow: true },
@@ -148,6 +150,7 @@ function renderPistes(pistes) {
       activeListItem = li;
       map.fitBounds(polyline.getBounds(), { padding: [40, 40] });
       polyline.openPopup();
+      if (window.innerWidth < 768) closeSidebar();
     });
 
     listEl.appendChild(li);
@@ -214,6 +217,27 @@ document.getElementById('file-input').addEventListener('change', (e) => {
   reader.readAsText(file);
   e.target.value = '';
 });
+
+// ── Mobile sidebar toggle ─────────────────────────────────────────────────────
+
+const sidebar = document.getElementById('sidebar');
+const toggleBtn = document.getElementById('sidebar-toggle');
+const closeBtn = document.getElementById('close-btn');
+const overlay = document.getElementById('overlay');
+
+function openSidebar() {
+  sidebar.classList.add('open');
+  overlay.classList.add('visible');
+}
+
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  overlay.classList.remove('visible');
+}
+
+toggleBtn.addEventListener('click', openSidebar);
+closeBtn.addEventListener('click', closeSidebar);
+overlay.addEventListener('click', closeSidebar);
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 
