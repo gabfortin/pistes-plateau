@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pistes cyclables — Le Plateau</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <aside id="sidebar">
+    <header>
+      <h1>Pistes cyclables</h1>
+      <label id="file-label" title="Charger un fichier .md">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        Charger pistes.md
+        <input type="file" id="file-input" accept=".md" />
+      </label>
+    </header>
+
+    <section id="legend">
+      <h2>Légende</h2>
+      <div id="legend-items"></div>
+    </section>
+
+    <section id="piste-section">
+      <h2>Pistes <span id="piste-count"></span></h2>
+      <ul id="piste-list"></ul>
+    </section>
+  </aside>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
