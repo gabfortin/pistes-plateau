@@ -18,6 +18,11 @@ const TYPE_DEFINITIONS = {
 
 const TYPE_ORDER = ['1a', '1b', '2a', '2b', '3a', '3b', '4a', '4b', '5a', '5b', '5c', '6a', '6b', '7', '8'];
 
+const INTERSECTION_TYPES = {
+  '1': { label: 'Intersection non gérée',   color: '#ef4444', dashArray: null },
+  '2': { label: 'Absence de cycle protégé', color: '#ef4444', dashArray: '5 4' },
+};
+
 // ── Map setup ─────────────────────────────────────────────────────────────────
 
 const map = L.map('map').setView([45.5202, -73.5862], 14);
@@ -30,6 +35,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // ── State ─────────────────────────────────────────────────────────────────────
 
 let layerGroup = L.layerGroup().addTo(map);
+let intersectionLayerGroup = L.layerGroup().addTo(map);
 let activeListItem = null;
 let polylineRefs = [];
 
@@ -75,6 +81,100 @@ function parsePistes(text) {
 
   if (current && current.coords.length >= 2) pistes.push(current);
   return pistes;
+}
+
+// ── Intersection parser ───────────────────────────────────────────────────────
+
+function parseIntersections(text) {
+  const intersections = [];
+  let current = null;
+
+  for (const raw of text.split('\n')) {
+    const line = raw.trim();
+
+    if (line.startsWith('## ')) {
+      if (current && current.coord) intersections.push(current);
+      current = { name: line.slice(3).trim(), type: null, coord: null };
+      continue;
+    }
+
+    if (!current) continue;
+
+    const typeMatch = line.match(/^type\s*:+\s*(\w+)/i);
+    if (typeMatch) { current.type = typeMatch[1]; continue; }
+
+    const coordMatch = line.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+    if (coordMatch && !current.coord) {
+      current.coord = [parseFloat(coordMatch[1]), parseFloat(coordMatch[2])];
+    }
+  }
+
+  if (current && current.coord) intersections.push(current);
+  return intersections;
+}
+
+// ── Intersection renderer ─────────────────────────────────────────────────────
+
+function renderIntersections(intersections) {
+  intersectionLayerGroup.clearLayers();
+
+  const listEl = document.getElementById('intersection-list');
+  const countEl = document.getElementById('intersection-count');
+  listEl.innerHTML = '';
+
+  if (intersections.length === 0) {
+    countEl.textContent = '';
+    return;
+  }
+
+  countEl.textContent = `(${intersections.length})`;
+
+  intersections.forEach((inter) => {
+    const def = INTERSECTION_TYPES[inter.type] ?? INTERSECTION_TYPES['1'];
+
+    const circleOptions = {
+      radius: 9,
+      color: '#7f1d1d',
+      weight: 2,
+      opacity: 1,
+      fillColor: def.color,
+      fillOpacity: 0.85,
+    };
+    if (def.dashArray) circleOptions.dashArray = def.dashArray;
+
+    const circle = L.circleMarker(inter.coord, circleOptions);
+    circle.bindPopup(`
+      <strong>${inter.name}</strong><br/>
+      <span style="color:#dc2626;font-size:12px">⚠ ${def.label}</span>
+    `);
+    intersectionLayerGroup.addLayer(circle);
+
+    const li = document.createElement('li');
+
+    const dot = document.createElement('span');
+    dot.className = 'piste-dot';
+    dot.style.background = def.color;
+
+    const nameEl = document.createElement('span');
+    nameEl.className = 'piste-name';
+    nameEl.textContent = inter.name;
+
+    const badge = document.createElement('span');
+    badge.className = 'piste-type-badge intersection-badge';
+    badge.textContent = `T${inter.type}`;
+
+    li.appendChild(dot);
+    li.appendChild(nameEl);
+    li.appendChild(badge);
+
+    li.addEventListener('click', () => {
+      map.setView(inter.coord, 17);
+      circle.openPopup();
+      if (window.innerWidth < 768) closeSidebar();
+    });
+
+    listEl.appendChild(li);
+  });
 }
 
 // ── Renderer ──────────────────────────────────────────────────────────────────
@@ -207,6 +307,34 @@ function buildLegend() {
     item.appendChild(label);
     container.appendChild(item);
   });
+
+  const sep = document.createElement('div');
+  sep.className = 'legend-separator';
+  container.appendChild(sep);
+
+  Object.entries(INTERSECTION_TYPES).forEach(([typeNum, def]) => {
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+
+    const wrap = document.createElement('div');
+    wrap.className = 'legend-circle-wrap';
+
+    const circle = document.createElement('div');
+    circle.className = 'legend-circle';
+    circle.style.background = def.color;
+    if (def.dashArray) circle.style.outline = '2px dashed #7f1d1d';
+    else circle.style.outline = '2px solid #7f1d1d';
+
+    wrap.appendChild(circle);
+
+    const label = document.createElement('span');
+    label.className = 'legend-label';
+    label.textContent = `${typeNum}. ${def.label}`;
+
+    item.appendChild(wrap);
+    item.appendChild(label);
+    container.appendChild(item);
+  });
 }
 
 function buildDashGradient(color, dashArray) {
@@ -228,6 +356,15 @@ document.getElementById('file-input').addEventListener('change', (e) => {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = (ev) => loadText(ev.target.result);
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+document.getElementById('intersection-file-input').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => renderIntersections(parseIntersections(ev.target.result));
   reader.readAsText(file);
   e.target.value = '';
 });
@@ -267,3 +404,8 @@ fetch('https://raw.githubusercontent.com/gabfortin/pistes-plateau/refs/heads/mai
     document.getElementById('piste-list').innerHTML =
       '<li class="empty-hint">Chargez un fichier pistes.md.</li>';
   });
+
+fetch('https://raw.githubusercontent.com/gabfortin/pistes-plateau/refs/heads/main/intersections.md')
+  .then((r) => r.ok ? r.text() : Promise.reject())
+  .then((text) => renderIntersections(parseIntersections(text)))
+  .catch(() => {});
