@@ -1,5 +1,5 @@
 const TYPE_DEFINITIONS = {
-  '1a':  { label: 'Chaussée désignée',                                                              color: '#c52222', weight: 3, dashArray: '8 5'  },
+  '1a':  { label: 'Chaussée désignée',                                                              color: '#c52222', weight: 3, dashArray: '8 5', arrow: true  },
   '1b':  { label: 'Chaussée désignée dans les deux sens',                                          color: '#c52222', weight: 3, dashArray: '8 5'  },
   '2a': { label: 'Chaussée désignée + bande cyclable en sens inverse',                            color: '#f97316', weight: 3, dashArray: '8 5'  },
   '2b': { label: 'Chaussée désignée + bande cyclable en sens inverse (protégée)',                 color: '#22c55e', weight: 4, dashArray: '8 5'  },
