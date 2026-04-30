@@ -2,9 +2,11 @@
 
 Carte interactive des pistes cyclables du Plateau-Mont-Royal (Montréal), construite avec [Leaflet.js](https://leafletjs.com/).
 
+Disponible en ligne : [pistes.gabfortin.com](https://pistes.gabfortin.com)
+
 ## Fonctionnement
 
-Les données sont décrites dans deux fichiers Markdown distincts, chargés automatiquement au démarrage depuis le dépôt GitHub. En cas d'échec, des boutons permettent de charger les fichiers manuellement depuis le disque.
+Les données sont décrites dans deux fichiers Markdown distincts (`pistes.md` et `intersections.md`), chargés automatiquement au démarrage depuis le dépôt GitHub. En cas d'échec, des boutons permettent de charger les fichiers manuellement depuis le disque. Les définitions de types sont documentées dans `types-pistes.md`.
 
 ### Pistes (`pistes.md`)
 
@@ -37,7 +39,7 @@ type: 1
 | 4a | Bande cyclable dans le sens des voitures seulement |
 | 4b | Bande cyclable à sens inverse seulement |
 | 5a | Bandes cyclables dans chaque direction, collées sur stationnement |
-| 5b | Bandes cyclables dans chaque direction, sans stationnement ou avec espacement |
+| 5b | Bandes cyclables dans chaque direction, sans stationnement, ou avec espacement |
 | 5c | Bandes cyclables dans chaque direction, avec une certaine protection |
 | 6a | Piste bidirectionnelle |
 | 6b | Piste bidirectionnelle protégée |
