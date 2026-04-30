@@ -41,9 +41,17 @@ let layerGroup = L.layerGroup().addTo(map);
 let intersectionLayerGroup = L.layerGroup().addTo(map);
 let activeListItem = null;
 let polylineRefs = [];
+let circleRefs = [];
+
+const CIRCLE_BASE_RADIUS = 7;
+const CIRCLE_MIN_RADIUS = 5;
 
 function weightForZoom(base, zoom) {
   return base * Math.max(1, 1 + (zoom - 14) * 0.25);
+}
+
+function radiusForZoom(zoom) {
+  return Math.max(CIRCLE_MIN_RADIUS, CIRCLE_BASE_RADIUS + (zoom - 14) * 1.5);
 }
 
 map.on('zoomend', () => {
@@ -51,6 +59,8 @@ map.on('zoomend', () => {
   polylineRefs.forEach(({ polyline, baseWeight }) => {
     polyline.setStyle({ weight: weightForZoom(baseWeight, zoom) });
   });
+  const r = radiusForZoom(zoom);
+  circleRefs.forEach((circle) => circle.setRadius(r));
 });
 
 // ── Parser ────────────────────────────────────────────────────────────────────
@@ -120,6 +130,7 @@ function parseIntersections(text) {
 
 function renderIntersections(intersections) {
   intersectionLayerGroup.clearLayers();
+  circleRefs = [];
 
   const listEl = document.getElementById('intersection-list');
   const countEl = document.getElementById('intersection-count');
@@ -136,7 +147,7 @@ function renderIntersections(intersections) {
     const def = INTERSECTION_TYPES[inter.type] ?? INTERSECTION_TYPES['1'];
 
     const circleOptions = {
-      radius: 9,
+      radius: radiusForZoom(map.getZoom()),
       color: '#7f1d1d',
       weight: 2,
       opacity: 1,
@@ -147,6 +158,7 @@ function renderIntersections(intersections) {
     if (def.dashArray) circleOptions.dashArray = def.dashArray;
 
     const circle = L.circleMarker(inter.coord, circleOptions);
+    circleRefs.push(circle);
     circle.bindPopup(`
       <strong>${inter.name}</strong><br/>
       <span style="color:#dc2626;font-size:12px">⚠ ${def.label}</span>
