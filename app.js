@@ -31,6 +31,18 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 let layerGroup = L.layerGroup().addTo(map);
 let activeListItem = null;
+let polylineRefs = [];
+
+function weightForZoom(base, zoom) {
+  return base * Math.max(1, 1 + (zoom - 14) * 0.25);
+}
+
+map.on('zoomend', () => {
+  const zoom = map.getZoom();
+  polylineRefs.forEach(({ polyline, baseWeight }) => {
+    polyline.setStyle({ weight: weightForZoom(baseWeight, zoom) });
+  });
+});
 
 // ── Parser ────────────────────────────────────────────────────────────────────
 
@@ -69,6 +81,7 @@ function parsePistes(text) {
 
 function renderPistes(pistes) {
   layerGroup.clearLayers();
+  polylineRefs = [];
 
   const listEl = document.getElementById('piste-list');
   const countEl = document.getElementById('piste-count');
@@ -93,12 +106,13 @@ function renderPistes(pistes) {
 
     const polylineOptions = {
       color: def.color,
-      weight: def.weight,
+      weight: weightForZoom(def.weight, map.getZoom()),
       opacity: 0.85,
     };
     if (def.dashArray) polylineOptions.dashArray = def.dashArray;
 
     const polyline = L.polyline(piste.coords, polylineOptions);
+    polylineRefs.push({ polyline, baseWeight: def.weight });
     polyline.bindPopup(`
       <strong>${piste.name}</strong><br/>
       <span style="color:#6b7280;font-size:12px">Type ${piste.type} — ${def.label}</span>
