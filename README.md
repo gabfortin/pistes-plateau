@@ -4,7 +4,9 @@ Carte interactive des pistes cyclables du Plateau-Mont-Royal (Montréal), constr
 
 ## Fonctionnement
 
-Les pistes sont décrites dans un fichier Markdown (`pistes.md`) avec un format simple :
+Les données sont décrites dans deux fichiers Markdown distincts, chargés automatiquement au démarrage depuis le dépôt GitHub. En cas d'échec, des boutons permettent de charger les fichiers manuellement depuis le disque.
+
+### Pistes (`pistes.md`)
 
 ```markdown
 ## Nom de la piste
@@ -13,7 +15,13 @@ type: 6b
 45.53679, -73.56364
 ```
 
-Chaque piste porte un type numéroté (1a à 8) qui détermine la couleur, l'épaisseur et le style de trait affiché sur la carte.
+### Intersections dangereuses (`intersections.md`)
+
+```markdown
+## Nom de l'intersection
+type: 1
+45.52446, -73.58951
+```
 
 ## Types de pistes
 
@@ -27,17 +35,32 @@ Chaque piste porte un type numéroté (1a à 8) qui détermine la couleur, l'ép
 | 3b | Vélo rue bidirectionnelle |
 | 4a | Bande cyclable dans le sens des voitures seulement |
 | 4b | Bande cyclable à sens inverse seulement |
-| 5  | Bandes cyclables dans chaque direction |
+| 5a | Bandes cyclables dans chaque direction, collées sur stationnement |
+| 5b | Bandes cyclables dans chaque direction, sans stationnement ou avec espacement |
+| 5c | Bandes cyclables dans chaque direction, avec une certaine protection |
 | 6a | Piste bidirectionnelle |
 | 6b | Piste bidirectionnelle protégée |
 | 7  | Piste unidirectionnelle protégée |
 | 8  | Deux pistes unidirectionnelles protégées |
 
-## Utilisation
+Les types à sens unique (1a, 3a, 4a, 4b, 7) affichent des flèches directionnelles sur la carte.
 
-Ouvrir `index.html` dans un navigateur (via un serveur local, p. ex. `npx serve .`).
+## Types d'intersections dangereuses
 
-L'application tente de charger `pistes.md` automatiquement au démarrage. Si le fichier n'est pas trouvé, un bouton permet d'en charger un manuellement depuis le disque.
+| Type | Description |
+|------|-------------|
+| 1 | Intersection non gérée |
+| 2 | Absence de cycle protégé |
+
+## Fonctionnalités
+
+- **Carte interactive** — fond OpenStreetMap, vue centrée sur le Plateau-Mont-Royal
+- **Légende dynamique** — construite automatiquement depuis les définitions de types, incluant pistes et intersections
+- **Panneau latéral** — liste cliquable des pistes et des intersections ; cliquer sur un élément recentre la carte et ouvre le popup
+- **Intersections dangereuses** — marqueurs circulaires sur la carte, avec popup descriptif et liste dédiée dans le panneau
+- **Mise à l'échelle au zoom** — épaisseur des polylignes et rayon des cercles s'ajustent dynamiquement selon le niveau de zoom
+- **Interface responsive** — sur mobile, le panneau latéral se ferme/ouvre via un bouton burger, avec un overlay de fond
+- **Chargement de fichiers** — boutons séparés pour charger manuellement `pistes.md` et `intersections.md`
 
 ## Technologies
 
