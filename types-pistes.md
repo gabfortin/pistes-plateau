@@ -7,8 +7,8 @@
 4a. Bande cyclable dans le sens des voitures seulement
 4b. Bande cyclable à sens inverse seulement
 5a. Bandes cyclables dans chaque direction, collées sur stationnement
-5b: Bandes cyclables dans chaque direction, avec espacement
-5c: Bandes cyclables dans chaque direction, avec une certaine protection
+5b. Bandes cyclables dans chaque direction, sans stationnement, ou avec espacement
+5c. Bandes cyclables dans chaque direction, avec une certaine protection
 6a. Piste bidirectionnelle
 6b. Piste bidirectionnelle protégée
 7. Piste unidirectionnelle protégée
