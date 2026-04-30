@@ -34,6 +34,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
+map.createPane('intersectionsPane');
+map.getPane('intersectionsPane').style.zIndex = 450;
+
 let layerGroup = L.layerGroup().addTo(map);
 let intersectionLayerGroup = L.layerGroup().addTo(map);
 let activeListItem = null;
@@ -139,6 +142,7 @@ function renderIntersections(intersections) {
       opacity: 1,
       fillColor: def.color,
       fillOpacity: 0.85,
+      pane: 'intersectionsPane',
     };
     if (def.dashArray) circleOptions.dashArray = def.dashArray;
 
