@@ -1,6 +1,7 @@
 const TYPE_DEFINITIONS = {
   '1a':  { label: 'Chaussée désignée',                                                              color: '#c52222', weight: 3, dashArray: '8 5', arrow: true  },
   '1b':  { label: 'Chaussée désignée dans les deux sens',                                          color: '#c52222', weight: 3, dashArray: '8 5'  },
+  '1c':  { label: 'Trottoir permettant la circulation à vélo',                                     color: '#a3e635', weight: 3, dashArray: '8 5'  },
   '2a': { label: 'Chaussée désignée + bande cyclable en sens inverse',                            color: '#f97316', weight: 3, dashArray: '8 5'  },
   '2b': { label: 'Chaussée désignée + bande cyclable en sens inverse (protégée)',                 color: '#22c55e', weight: 4, dashArray: '8 5'  },
   '3a': { label: 'Vélo rue unidirectionnelle',                                                    color: '#3b82f6', weight: 4, dashArray: '14 5', arrow: true },
@@ -12,11 +13,12 @@ const TYPE_DEFINITIONS = {
   '5c':  { label: 'Bandes cyclables dans chaque direction, avec une certaine protection',                                       color: '#7dea08', weight: 4, dashArray: '12 4' },
   '6a': { label: 'Piste bidirectionnelle',                                                        color: '#16a34a', weight: 6, dashArray: null   },
   '6b': { label: 'Piste bidirectionnelle protégée',                                              color: '#14532d', weight: 8, dashArray: null   },
+  '6c': { label: 'Piste bidirectionnelle partagée avec piétons',                                 color: '#a3e635', weight: 6, dashArray: null   },
   '7':  { label: 'Piste unidirectionnelle protégée',                                             color: '#0891b2', weight: 6, dashArray: null,   arrow: true },
   '8':  { label: 'Deux pistes unidirectionnelles protégées',                                     color: '#164e63', weight: 8, dashArray: null   },
 };
 
-const TYPE_ORDER = ['1a', '1b', '2a', '2b', '3a', '3b', '4a', '4b', '5a', '5b', '5c', '6a', '6b', '7', '8'];
+const TYPE_ORDER = ['1a', '1b', '1c', '2a', '2b', '3a', '3b', '4a', '4b', '5a', '5b', '5c', '6a', '6b', '6c', '7', '8'];
 
 const INTERSECTION_TYPES = {
   '1': { label: 'Intersection non gérée',   color: '#ef4444', dashArray: null },

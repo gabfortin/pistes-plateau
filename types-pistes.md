@@ -1,5 +1,6 @@
 1a. Chaussée désignée
 1b. Chaussée désignée dans les deux sens
+1c. Trottoir permettant la circulation à vélo
 2a. Chaussée désignée dans le sens des voitures et bande cyclable en sens inverse
 2b.  Chaussée désignée dans le sens des voitures et bande cyclable en sens inverse (protégée)
 3a. Vélo rue unidirectionnelle
@@ -11,5 +12,6 @@
 5c. Bandes cyclables dans chaque direction, avec une certaine protection
 6a. Piste bidirectionnelle
 6b. Piste bidirectionnelle protégée
+6c. Piste bidirectionnelle partagée avec piétons
 7. Piste unidirectionnelle protégée
 8. Deux pistes unidirectionnelles protégées
