@@ -11,6 +11,19 @@
 <body>
   <div id="overlay"></div>
 
+  <nav id="topbar">
+    <div id="topbar-nav">
+      <a href="/" class="nav-link active">Pistes</a>
+      <a href="https://velo.gabfortin.com" class="nav-link">Compteurs</a>
+    </div>
+    <a href="https://gabfortin.com" id="topbar-profile" title="gabfortin.com">
+      <span id="topbar-profile-name">gabfortin.com</span>
+      <img src="img/Gabriel Fortin.png" alt="Gabriel Fortin" />
+    </a>
+  </nav>
+
+  <div id="main">
+
   <aside id="sidebar">
     <header>
       <div class="header-top">
@@ -71,6 +84,7 @@
   </aside>
 
   <div id="map">
+
     <button id="sidebar-toggle" title="Afficher le panneau">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -80,6 +94,8 @@
       </svg>
     </button>
   </div>
+
+  </div><!-- #main -->
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>

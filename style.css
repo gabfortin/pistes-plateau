@@ -5,6 +5,7 @@
 }
 
 :root {
+  --topbar-h: 50px;
   --sidebar-width: 310px;
   --accent: #2563eb;
   --accent-light: #eff6ff;
@@ -31,6 +32,93 @@ html, body {
 
 body {
   display: flex;
+  flex-direction: column;
+}
+
+/* ── Top bar ──────────────────────────────────────────────── */
+
+#topbar {
+  height: calc(var(--topbar-h) + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 20px;
+  padding-right: 16px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  z-index: 900;
+  box-shadow: var(--shadow-sm);
+}
+
+#topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: background var(--transition), color var(--transition);
+}
+
+.nav-link:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+#topbar-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  transition: color var(--transition);
+}
+
+#topbar-profile:hover {
+  color: var(--text-primary);
+}
+
+#topbar-profile:hover img {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+#topbar-profile-name {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+#topbar-profile img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px var(--border);
+  transition: box-shadow var(--transition);
+}
+
+/* ── Main container ───────────────────────────────────────── */
+
+#main {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  min-height: 0;
 }
 
 /* ── Overlay ──────────────────────────────────────────────── */
@@ -58,8 +146,7 @@ body {
 #sidebar {
   width: var(--sidebar-width);
   min-width: var(--sidebar-width);
-  height: 100vh;
-  height: 100dvh;
+  height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -90,7 +177,6 @@ body {
 
 header {
   padding: 20px 18px 16px;
-  padding-top: max(20px, env(safe-area-inset-top));
   background: linear-gradient(145deg, #0f2952 0%, #1d4ed8 60%, #3b82f6 100%);
   display: flex;
   flex-direction: column;
@@ -372,8 +458,7 @@ header h1 {
 
 #map {
   flex: 1;
-  height: 100vh;
-  height: 100dvh;
+  height: 100%;
   position: relative;
 }
 
@@ -386,7 +471,7 @@ header h1 {
 #sidebar-toggle {
   position: absolute;
   top: 14px;
-  right: 14px;
+  left: 14px;
   z-index: 1000;
   background: #fff;
   border: none;
@@ -440,10 +525,6 @@ header h1 {
 /* ── Mobile ───────────────────────────────────────────────── */
 
 @media (max-width: 767px) {
-  body {
-    flex-direction: column;
-  }
-
   #overlay {
     display: block;
     pointer-events: none;
@@ -451,10 +532,9 @@ header h1 {
 
   #sidebar {
     position: fixed;
-    top: 0;
+    top: calc(var(--topbar-h) + env(safe-area-inset-top));
     left: 0;
-    height: 100vh;
-    height: 100dvh;
+    height: calc(100dvh - var(--topbar-h) - env(safe-area-inset-top));
     width: min(var(--sidebar-width), 88vw);
     min-width: unset;
     transform: translateX(-100%);
@@ -470,15 +550,24 @@ header h1 {
     display: flex;
   }
 
+  #main {
+    flex: 1;
+    min-height: 0;
+  }
+
   #map {
     width: 100%;
-    height: 100vh;
-    height: 100dvh;
-    flex: none;
+    height: 100%;
+    flex: 1;
   }
 
   #sidebar-toggle {
     display: flex;
+  }
+
+  .leaflet-top.leaflet-left {
+    left: auto;
+    right: 0;
   }
 
   #piste-list li {
