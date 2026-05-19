@@ -44,12 +44,17 @@ let intersectionLayerGroup = L.layerGroup().addTo(map);
 let activeListItem = null;
 let polylineRefs = [];
 let circleRefs = [];
+let decoratorRefs = [];
 
 const CIRCLE_BASE_RADIUS = 7;
 const CIRCLE_MIN_RADIUS = 5;
 
 function weightForZoom(base, zoom) {
   return base * Math.max(1, 1 + (zoom - 14) * 0.25);
+}
+
+function pixelSizeForZoom(zoom) {
+  return Math.round(10 * Math.max(1, 1 + (zoom - 14) * 0.25));
 }
 
 function radiusForZoom(zoom) {
@@ -63,6 +68,18 @@ map.on('zoomend', () => {
   });
   const r = radiusForZoom(zoom);
   circleRefs.forEach((circle) => circle.setRadius(r));
+  const px = pixelSizeForZoom(zoom);
+  decoratorRefs.forEach(({ decorator, color }) => {
+    decorator.setPatterns([{
+      offset: '10%',
+      repeat: '20%',
+      symbol: L.Symbol.arrowHead({
+        pixelSize: px,
+        polygon: false,
+        pathOptions: { stroke: true, color, weight: 2.5, opacity: 1 },
+      }),
+    }]);
+  });
 });
 
 // ── Parser ────────────────────────────────────────────────────────────────────
@@ -200,6 +217,7 @@ function renderIntersections(intersections) {
 function renderPistes(pistes) {
   layerGroup.clearLayers();
   polylineRefs = [];
+  decoratorRefs = [];
 
   const listEl = document.getElementById('piste-list');
   const countEl = document.getElementById('piste-count');
@@ -243,7 +261,7 @@ function renderPistes(pistes) {
           offset: '10%',
           repeat: '20%',
           symbol: L.Symbol.arrowHead({
-            pixelSize: 10,
+            pixelSize: pixelSizeForZoom(map.getZoom()),
             polygon: false,
             pathOptions: {
               stroke: true,
@@ -255,6 +273,7 @@ function renderPistes(pistes) {
         }],
       });
       layerGroup.addLayer(decorator);
+      decoratorRefs.push({ decorator, color: def.color });
     }
 
     // Sidebar list item
