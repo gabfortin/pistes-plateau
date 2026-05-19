@@ -22,7 +22,7 @@ const TYPE_ORDER = ['1a', '1b', '1c', '2a', '2b', '3a', '3b', '4a', '4b', '5a', 
 
 const INTERSECTION_TYPES = {
   '1': { label: 'Intersection non gérée',   color: '#ef4444', dashArray: null, description: 'Aucun feu de circulation ni panneau d\'arrêt ne protège les déplacements cyclistes' },
-  '2': { label: 'Absence de cycle protégé', color: '#eb6142', dashArray: '5 4' },
+  '2': { label: 'Absence de cycle protégé', color: '#c57d6d', dashArray: '5 4' },
 };
 
 // ── Map setup ─────────────────────────────────────────────────────────────────
