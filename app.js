@@ -21,8 +21,8 @@ const TYPE_DEFINITIONS = {
 const TYPE_ORDER = ['1a', '1b', '1c', '2a', '2b', '3a', '3b', '4a', '4b', '5a', '5b', '5c', '6a', '6b', '6c', '7', '8'];
 
 const INTERSECTION_TYPES = {
-  '1': { label: 'Intersection non gérée',   color: '#ef4444', dashArray: null },
-  '2': { label: 'Absence de cycle protégé', color: '#ef4444', dashArray: '5 4' },
+  '1': { label: 'Intersection non gérée',   color: '#ef4444', dashArray: null, description: 'Aucun feu de circulation ni panneau d\'arrêt ne protège les déplacements cyclistes' },
+  '2': { label: 'Absence de cycle protégé', color: '#eb6142', dashArray: '5 4' },
 };
 
 // ── Map setup ─────────────────────────────────────────────────────────────────
@@ -180,7 +180,7 @@ function renderIntersections(intersections) {
     circleRefs.push(circle);
     circle.bindPopup(`
       <strong>${inter.name}</strong><br/>
-      <span style="color:#dc2626;font-size:12px">⚠ ${def.label}</span>
+      <span style="color:#dc2626;font-size:12px">⚠ ${def.label}</span>${def.description ? `<br/><span style="color:#6b7280;font-size:11px">${def.description}</span>` : ''}
     `);
     intersectionLayerGroup.addLayer(circle);
 
