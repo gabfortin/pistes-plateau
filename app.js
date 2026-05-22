@@ -50,7 +50,7 @@ const CIRCLE_BASE_RADIUS = 7;
 const CIRCLE_MIN_RADIUS = 5;
 
 function weightForZoom(base, zoom) {
-  return base * Math.max(1, 1 + (zoom - 14) * 0.25);
+  return base * Math.max(0.4, 1 + (zoom - 14) * 0.25);
 }
 
 function pixelSizeForZoom(zoom) {
@@ -63,8 +63,11 @@ function radiusForZoom(zoom) {
 
 map.on('zoomend', () => {
   const zoom = map.getZoom();
-  polylineRefs.forEach(({ polyline, baseWeight }) => {
-    polyline.setStyle({ weight: weightForZoom(baseWeight, zoom) });
+  polylineRefs.forEach(({ glow, main, highlight, baseWeight }) => {
+    const w = weightForZoom(baseWeight, zoom);
+    glow.setStyle({ weight: w + 6 });
+    main.setStyle({ weight: w });
+    if (highlight) highlight.setStyle({ weight: Math.max(1, w * 0.35) });
   });
   const r = radiusForZoom(zoom);
   circleRefs.forEach((circle) => circle.setRadius(r));
@@ -240,23 +243,37 @@ function renderPistes(pistes) {
       dashArray: null,
     };
 
-    const polylineOptions = {
-      color: def.color,
-      weight: weightForZoom(def.weight, map.getZoom()),
-      opacity: 0.85,
-    };
-    if (def.dashArray) polylineOptions.dashArray = def.dashArray;
+    const w = weightForZoom(def.weight, map.getZoom());
 
-    const polyline = L.polyline(piste.coords, polylineOptions);
-    polylineRefs.push({ polyline, baseWeight: def.weight });
-    polyline.bindPopup(`
+    const glowLine = L.polyline(piste.coords, {
+      color: def.color,
+      weight: w + 6,
+      opacity: 0.15,
+      interactive: false,
+    });
+
+    const mainOpts = { color: def.color, weight: w, opacity: 0.9 };
+    if (def.dashArray) mainOpts.dashArray = def.dashArray;
+    const mainLine = L.polyline(piste.coords, mainOpts);
+
+    const highlightLine = !def.dashArray ? L.polyline(piste.coords, {
+      color: '#ffffff',
+      weight: Math.max(1, w * 0.35),
+      opacity: 0.28,
+      interactive: false,
+    }) : null;
+
+    polylineRefs.push({ glow: glowLine, main: mainLine, highlight: highlightLine, baseWeight: def.weight });
+    mainLine.bindPopup(`
       <strong>${piste.name}</strong><br/>
       <span style="color:#6b7280;font-size:12px">Type ${piste.type} — ${def.label}</span>
     `);
-    layerGroup.addLayer(polyline);
+    layerGroup.addLayer(glowLine);
+    layerGroup.addLayer(mainLine);
+    if (highlightLine) layerGroup.addLayer(highlightLine);
 
     if (def.arrow) {
-      const decorator = L.polylineDecorator(polyline, {
+      const decorator = L.polylineDecorator(mainLine, {
         patterns: [{
           offset: '10%',
           repeat: '20%',
@@ -299,8 +316,8 @@ function renderPistes(pistes) {
       if (activeListItem) activeListItem.classList.remove('active');
       li.classList.add('active');
       activeListItem = li;
-      map.fitBounds(polyline.getBounds(), { padding: [40, 40] });
-      polyline.openPopup();
+      map.fitBounds(mainLine.getBounds(), { padding: [40, 40] });
+      mainLine.openPopup();
       if (window.innerWidth < 768) closeSidebar();
     });
 
