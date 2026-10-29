@@ -93,21 +93,13 @@ html, body {
 .gf-brand-sub a:hover { text-decoration: underline; }
 .gf-header-spacer { flex: 1; }
 
-/* Navigation Pistes / Compteurs : pilule segmentée */
-.gf-nav {
-  display: inline-flex; align-items: center; gap: 2px; padding: 3px;
-  background: var(--glass); border: 1px solid var(--glass-border); border-radius: 999px;
+.gf-back {
+  font-size: .78rem; font-weight: 600; color: var(--ink-700); text-decoration: none;
+  white-space: nowrap; padding: 7px 11px; border-radius: 999px;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  transition: background .18s var(--ease), transform .18s var(--ease);
 }
-.gf-nav-link {
-  font-size: .8rem; font-weight: 600; color: var(--ink-700); text-decoration: none;
-  white-space: nowrap; text-align: center; padding: 6px 14px; border-radius: 999px;
-  transition: background .18s var(--ease), color .18s var(--ease);
-}
-.gf-nav-link:hover { background: rgba(255, 255, 255, .7); color: var(--ink-900); }
-.gf-nav-link.active {
-  background: linear-gradient(140deg, var(--brand-light), var(--brand-dark)); color: #fff;
-  box-shadow: 0 4px 12px -4px rgba(29, 78, 216, .55), inset 0 1px 0 rgba(255, 255, 255, .35);
-}
+.gf-back:hover { background: var(--glass-strong); transform: translateY(-1px); }
 
 /* ---------- Bouton "i" + modale ---------- */
 .gf-info-btn {
@@ -179,9 +171,11 @@ html, body {
 }
 
 @media (max-width: 760px) {
-  .gf-header { top: 10px; left: 10px; right: 10px; padding: 10px 14px; gap: 8px 10px; }
-  .gf-nav { order: 10; flex: 1 1 100%; }
-  .gf-nav-link { flex: 1 1 0; min-width: 0; }
+  .gf-header { top: 10px; left: 10px; right: 10px; padding: 10px 14px; gap: 8px 10px; flex-wrap: nowrap; }
+  .gf-brand { flex: 1 1 auto; gap: 10px; }
+  .gf-brand-mark { width: 34px; height: 34px; }
+  .gf-brand-sub { overflow: hidden; text-overflow: ellipsis; }
+  .gf-header-spacer { display: none; }
 }
 
 /* ---------- Sidebar ---------- */
