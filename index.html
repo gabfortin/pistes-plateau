@@ -4,98 +4,116 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pistes cyclables — Le Plateau</title>
-  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="icon" type="image/png" href="favico.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="overlay"></div>
+  <div id="map"></div>
 
-  <nav id="topbar">
-    <div id="topbar-nav">
-      <a href="/" class="nav-link active">Pistes</a>
-      <a href="https://velo.gabfortin.com" class="nav-link">Compteurs</a>
+  <div class="gf-header">
+    <div class="gf-brand">
+      <div class="gf-brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/>
+          <circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/>
+        </svg>
+      </div>
+      <div class="gf-brand-text">
+        <div class="gf-brand-word">Pistes <span>cyclables</span></div>
+        <div class="gf-brand-sub">Le Plateau-Mont-Royal — <a href="https://gabfortin.com" target="_blank" rel="noopener">Gabriel Fortin</a></div>
+      </div>
     </div>
-    <a href="https://gabfortin.com" id="topbar-profile" title="gabfortin.com">
-      <span id="topbar-profile-name">gabfortin.com</span>
-      <img src="img/Gabriel Fortin.png" alt="Gabriel Fortin" />
-    </a>
-  </nav>
-
-  <div id="main">
-
-  <aside id="sidebar">
-    <header>
-      <div class="header-top">
-        <div class="header-title">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/>
-            <circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/>
-          </svg>
-          <h1>Pistes cyclables</h1>
-        </div>
-        <button id="close-btn" title="Fermer">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </button>
-      </div>
-      <p class="subtitle">Le Plateau-Mont-Royal</p>
-      <div class="file-labels">
-        <label class="file-label" title="Charger un fichier pistes.md">
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/>
-            <line x1="12" y1="3" x2="12" y2="15"/>
-          </svg>
-          Pistes
-          <input type="file" id="file-input" accept=".md" />
-        </label>
-        <label class="file-label" title="Charger un fichier intersections.md">
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/>
-            <line x1="12" y1="3" x2="12" y2="15"/>
-          </svg>
-          Intersections
-          <input type="file" id="intersection-file-input" accept=".md" />
-        </label>
-      </div>
-    </header>
-
-    <section id="legend">
-      <h2>Légende</h2>
-      <div id="legend-items"></div>
-    </section>
-
-    <section id="piste-section">
-      <h2>Pistes <span id="piste-count"></span></h2>
-      <ul id="piste-list"></ul>
-    </section>
-
-    <section id="intersection-section">
-      <h2>Intersections dangereuses <span id="intersection-count"></span></h2>
-      <ul id="intersection-list"></ul>
-    </section>
-  </aside>
-
-  <div id="map">
-
-    <button id="sidebar-toggle" title="Afficher le panneau">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <line x1="3" y1="12" x2="21" y2="12"/>
-        <line x1="3" y1="18" x2="21" y2="18"/>
+    <nav class="gf-nav" aria-label="Cartes vélo">
+      <a href="/" class="gf-nav-link active" aria-current="page">Pistes</a>
+      <a href="https://velo.gabfortin.com" class="gf-nav-link">Compteurs</a>
+    </nav>
+    <div class="gf-header-spacer"></div>
+    <button class="gf-info-btn" id="gfInfoBtn" aria-label="À propos de cette carte" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="7.6" r="1.4" fill="currentColor"/>
+        <path d="M12 11v6.2" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
       </svg>
     </button>
   </div>
 
-  </div><!-- #main -->
+  <div class="gf-info-overlay" id="gfInfoOverlay" role="dialog" aria-modal="true" aria-labelledby="gfInfoTitle">
+    <div class="gf-info-panel">
+      <button class="gf-info-close" id="gfInfoClose" aria-label="Fermer">✕</button>
+      <h2 id="gfInfoTitle">À propos de cette carte</h2>
+      <p>Cette carte recense les aménagements cyclables du Plateau-Mont-Royal, classés par type (de la simple chaussée désignée jusqu'aux pistes unidirectionnelles protégées), ainsi que les intersections dangereuses pour les cyclistes.</p>
+      <p><strong>Données :</strong> relevé maison, publié sur <a href="https://github.com/gabfortin/pistes-plateau" target="_blank" rel="noopener">GitHub</a> (<code>pistes.md</code> et <code>intersections.md</code>). Fond de carte © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>.</p>
+      <p>Carte réalisée par <a href="https://gabfortin.com" target="_blank" rel="noopener">Gabriel Fortin</a>, conseiller d'arrondissement au Plateau-Mont-Royal.</p>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var btn = document.getElementById('gfInfoBtn');
+      var overlay = document.getElementById('gfInfoOverlay');
+      var closeBtn = document.getElementById('gfInfoClose');
+      function openInfo() { overlay.classList.add('open'); }
+      function closeInfo() { overlay.classList.remove('open'); }
+      btn.addEventListener('click', openInfo);
+      closeBtn.addEventListener('click', closeInfo);
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) closeInfo(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeInfo(); });
+    })();
+  </script>
+
+  <button class="gf-sidebar-toggle" id="gfSidebarToggle" aria-label="Légende et liste des pistes" aria-expanded="true" aria-controls="gfSidebar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+  </button>
+
+  <aside class="gf-sidebar" id="gfSidebar" aria-label="Légende et liste des pistes">
+    <div class="gf-sidebar-header">
+      <h2>Légende</h2>
+    </div>
+    <div class="gf-legend" id="legend-items"></div>
+
+    <div class="gf-sidebar-divider"></div>
+    <div class="gf-sidebar-header">
+      <h2>Pistes <span class="gf-count" id="piste-count"></span></h2>
+    </div>
+    <ul class="gf-sidebar-list" id="piste-list"></ul>
+
+    <div class="gf-sidebar-divider"></div>
+    <div class="gf-sidebar-header">
+      <h2>Intersections dangereuses <span class="gf-count" id="intersection-count"></span></h2>
+    </div>
+    <ul class="gf-sidebar-list" id="intersection-list"></ul>
+
+    <div class="gf-sidebar-divider"></div>
+    <div class="gf-sidebar-header">
+      <h2>Charger un fichier</h2>
+    </div>
+    <div class="gf-file-labels">
+      <label class="gf-file-label" title="Charger un fichier pistes.md">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        Pistes
+        <input type="file" id="file-input" accept=".md" />
+      </label>
+      <label class="gf-file-label" title="Charger un fichier intersections.md">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        Intersections
+        <input type="file" id="intersection-file-input" accept=".md" />
+      </label>
+    </div>
+  </aside>
+  <div class="gf-sidebar-scrim" id="gfSidebarScrim"></div>
+
+  <div class="watermark">
+    <a class="watermark-avatar" href="https://gabfortin.com" target="_blank" rel="noopener" title="Gabriel Fortin" aria-label="Gabriel Fortin">
+      <img src="img/Gabriel Fortin.png" alt="Gabriel Fortin" />
+    </a>
+    <span><a href="https://gabfortin.com" target="_blank" rel="noopener">Gabriel Fortin</a> · Fond © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></span>
+  </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>

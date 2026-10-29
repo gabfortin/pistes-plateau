@@ -27,12 +27,30 @@ const INTERSECTION_TYPES = {
 
 // ── Map setup ─────────────────────────────────────────────────────────────────
 
-const map = L.map('map').setView([45.5202, -73.5862], 14);
+const map = L.map('map', { zoomControl: false }).setView([45.5202, -73.5862], 14);
+L.control.zoom({ position: 'bottomright' }).addTo(map);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   maxZoom: 19,
 }).addTo(map);
+
+const headerEl = document.querySelector('.gf-header');
+const isMobile = () => window.matchMedia('(max-width: 760px)').matches;
+
+// Le bandeau flotte au-dessus de la carte (et peut faire 2 lignes en mobile) : on en tient compte pour l'auto-pan
+function popupOptions() {
+  const topPad = (headerEl ? headerEl.offsetHeight : 76) + 16;
+  return { autoPanPaddingTopLeft: [24, topPad], autoPanPaddingBottomRight: [24, 24] };
+}
+
+// Padding de fitBounds : bandeau en haut, panneau latéral à gauche s'il est ouvert (desktop)
+function fitPadding() {
+  const top = (headerEl ? headerEl.offsetHeight : 76) + 32;
+  const sidebarOpen = !isMobile() && !document.body.classList.contains('gf-sidebar-collapsed');
+  const left = sidebarOpen ? document.getElementById('gfSidebar').offsetWidth + 48 : 40;
+  return { paddingTopLeft: [left, top], paddingBottomRight: [40, 40] };
+}
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
@@ -182,9 +200,11 @@ function renderIntersections(intersections) {
     const circle = L.circleMarker(inter.coord, circleOptions);
     circleRefs.push(circle);
     circle.bindPopup(`
-      <strong>${inter.name}</strong><br/>
-      <span style="color:#dc2626;font-size:12px">⚠ ${def.label}</span>${def.description ? `<br/><span style="color:#6b7280;font-size:11px">${def.description}</span>` : ''}
-    `);
+      <div class="gf-pop-eyebrow danger">⚠ Intersection dangereuse</div>
+      <h3 class="gf-pop-name">${inter.name}</h3>
+      <div class="gf-pop-row"><span class="k">Type ${inter.type}</span><span class="v"><span class="gf-pop-dot" style="background:${def.color}"></span>${def.label}</span></div>
+      ${def.description ? `<p class="gf-pop-note">${def.description}</p>` : ''}
+    `, popupOptions());
     intersectionLayerGroup.addLayer(circle);
 
     const li = document.createElement('li');
@@ -208,7 +228,7 @@ function renderIntersections(intersections) {
     li.addEventListener('click', () => {
       map.setView(inter.coord, 17);
       circle.openPopup();
-      if (window.innerWidth < 768) closeSidebar();
+      if (isMobile()) setSidebarOpenMobile(false);
     });
 
     listEl.appendChild(li);
@@ -265,9 +285,10 @@ function renderPistes(pistes) {
 
     polylineRefs.push({ glow: glowLine, main: mainLine, highlight: highlightLine, baseWeight: def.weight });
     mainLine.bindPopup(`
-      <strong>${piste.name}</strong><br/>
-      <span style="color:#6b7280;font-size:12px">Type ${piste.type} — ${def.label}</span>
-    `);
+      <div class="gf-pop-eyebrow">Type ${piste.type}</div>
+      <h3 class="gf-pop-name">${piste.name}</h3>
+      <div class="gf-pop-row"><span class="k">Aménagement</span><span class="v"><span class="gf-pop-dot" style="background:${def.color}"></span>${def.label}</span></div>
+    `, popupOptions());
     layerGroup.addLayer(glowLine);
     layerGroup.addLayer(mainLine);
     if (highlightLine) layerGroup.addLayer(highlightLine);
@@ -316,9 +337,9 @@ function renderPistes(pistes) {
       if (activeListItem) activeListItem.classList.remove('active');
       li.classList.add('active');
       activeListItem = li;
-      map.fitBounds(mainLine.getBounds(), { padding: [40, 40] });
+      map.fitBounds(mainLine.getBounds(), fitPadding());
       mainLine.openPopup();
-      if (window.innerWidth < 768) closeSidebar();
+      if (isMobile()) setSidebarOpenMobile(false);
     });
 
     listEl.appendChild(li);
@@ -423,26 +444,34 @@ document.getElementById('intersection-file-input').addEventListener('change', (e
   e.target.value = '';
 });
 
-// ── Mobile sidebar toggle ─────────────────────────────────────────────────────
+// ── Sidebar toggle (ouverte par défaut sur desktop, fermée sur mobile) ────────
 
-const sidebar = document.getElementById('sidebar');
-const toggleBtn = document.getElementById('sidebar-toggle');
-const closeBtn = document.getElementById('close-btn');
-const overlay = document.getElementById('overlay');
+const sidebarToggle = document.getElementById('gfSidebarToggle');
+const sidebar = document.getElementById('gfSidebar');
+const sidebarScrim = document.getElementById('gfSidebarScrim');
 
-function openSidebar() {
-  sidebar.classList.add('open');
-  overlay.classList.add('visible');
+function setSidebarOpenMobile(open) {
+  sidebar.classList.toggle('open', open);
+  sidebarScrim.classList.toggle('open', open);
+  sidebarToggle.setAttribute('aria-expanded', String(open));
 }
 
-function closeSidebar() {
-  sidebar.classList.remove('open');
-  overlay.classList.remove('visible');
+function toggleSidebar() {
+  if (isMobile()) {
+    setSidebarOpenMobile(!sidebar.classList.contains('open'));
+  } else {
+    const collapsed = document.body.classList.toggle('gf-sidebar-collapsed');
+    sidebarToggle.setAttribute('aria-expanded', String(!collapsed));
+  }
 }
 
-toggleBtn.addEventListener('click', openSidebar);
-closeBtn.addEventListener('click', closeSidebar);
-overlay.addEventListener('click', closeSidebar);
+sidebarToggle.addEventListener('click', toggleSidebar);
+sidebarScrim.addEventListener('click', () => setSidebarOpenMobile(false));
+if (isMobile()) sidebarToggle.setAttribute('aria-expanded', 'false');
+
+// Le bouton flottant se place sous le bandeau, dont la hauteur varie en mobile (nav sur 2 lignes)
+const syncHeaderH = () => document.documentElement.style.setProperty('--gf-header-h', headerEl.offsetHeight + 'px');
+new ResizeObserver(syncHeaderH).observe(headerEl);
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 
