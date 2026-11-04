@@ -71,3 +71,10 @@ Les types à sens unique (1a, 3a, 4a, 4b, 7) affichent des flèches directionnel
 - [Leaflet](https://leafletjs.com/) — rendu de carte
 - [leaflet-polylinedecorator](https://github.com/bbecquet/Leaflet.PolylineDecorator) — flèches directionnelles
 - OpenStreetMap — fond de carte
+- [GoatCounter](https://www.goatcounter.com) — statistiques de visite anonymes, sans cookies
+
+## Confidentialité
+
+Aucun cookie ni compte. Les fichiers chargés avec les boutons « Charger » restent
+dans le navigateur. Détails : [confidentialite.html](confidentialite.html), à mettre
+à jour (avec sa date) si un service externe est ajouté.
