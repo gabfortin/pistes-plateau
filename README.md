@@ -66,6 +66,10 @@ Les types à sens unique (1a, 3a, 4a, 4b, 7) affichent des flèches directionnel
 - **Interface responsive** — sur mobile, le panneau latéral se ferme/ouvre via un bouton burger, avec un overlay de fond
 - **Chargement de fichiers** — boutons séparés pour charger manuellement `pistes.md` et `intersections.md`
 
+## Mode sombre
+
+La carte suit le mode clair ou sombre de l'appareil, selon la recette commune des cartes (`~/Developer/MAP-DESIGN-SYSTEM.md`, section « Mode sombre »). Toutes les couleurs de surface et de texte passent par les jetons du `:root` de `style.css`, redéfinis dans le bloc `@media (prefers-color-scheme: dark)`. Les couleurs des types de pistes ne changent pas (elles font la légende) : en sombre, un halo clair (`--line-halo`) garde visibles les tracés foncés (6b, 8). La page de confidentialité a aussi son mode sombre.
+
 ## Technologies
 
 - [Leaflet](https://leafletjs.com/) — rendu de carte
