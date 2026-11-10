@@ -1,84 +1,106 @@
 # Pistes cyclables — Le Plateau
 
-Carte interactive des pistes cyclables du Plateau-Mont-Royal (Montréal), construite avec [Leaflet.js](https://leafletjs.com/).
+Carte interactive des pistes cyclables du Plateau-Mont-Royal (Montréal), par
+type d'aménagement, avec les intersections dangereuses. Pour les cyclistes et
+pour qui veut voir où le réseau est protégé ou non.
 
-Disponible en ligne : [pistes.gabfortin.com](https://pistes.gabfortin.com)
+**En ligne :** [pistes.gabfortin.com](https://pistes.gabfortin.com)
 
-## Fonctionnement
+## Contenu
 
-Les données sont décrites dans deux fichiers Markdown distincts (`pistes.md` et `intersections.md`), chargés automatiquement au démarrage depuis le dépôt GitHub. En cas d'échec, des boutons permettent de charger les fichiers manuellement depuis le disque. Les définitions de types sont documentées dans `types-pistes.md`.
+| Élément | Ce qu'il fait |
+|---|---|
+| **Carte** | Fond OpenStreetMap centré sur le Plateau ; épaisseur des tracés et taille des cercles ajustées au zoom ; flèches sur les types à sens unique (1a, 3a, 4a, 4b, 7) |
+| **Légende** | Construite à partir des définitions de types, pistes et intersections |
+| **Panneau latéral** | Liste cliquable des pistes et des intersections : un clic recentre la carte et ouvre le popup ; repliable (burger) sur mobile |
+| **Intersections dangereuses** | Marqueurs circulaires avec popup descriptif et liste dédiée |
+| **Chargement manuel** | Boutons pour charger `pistes.md` et `intersections.md` depuis le disque si le chargement automatique échoue |
 
-### Pistes (`pistes.md`)
+Mode sombre selon l'appareil : les couleurs des types ne changent pas (elles
+font la légende), un halo clair (`--line-halo`) garde visibles les tracés
+foncés (6b, 8).
 
-```markdown
-## Nom de la piste
-type: 6b
-45.51483, -73.58465
-45.53679, -73.56364
+## Données
+
+### Sources
+
+| Source | Producteur | Utilisée pour |
+|---|---|---|
+| `pistes.md`, `intersections.md` | Relevé de Gabriel Fortin, écrit à la main | Tracés des pistes et intersections dangereuses |
+| [OpenStreetMap](https://www.openstreetmap.org) | Contributeurs d'OpenStreetMap, ODbL | Fond de carte |
+
+### Mise à jour
+
+**À la main** : modifier `pistes.md` ou `intersections.md`, puis pousser sur
+`main`. La carte lit ces fichiers sur GitHub à chaque visite. Format des
+fichiers et définition des types : [DONNEES.md](DONNEES.md).
+
+### Mises en garde
+
+- Le classement des aménagements en types est celui de ce projet, pas une
+  classification officielle.
+- Initiative indépendante : ni produite ni approuvée par l'arrondissement ni
+  par la Ville de Montréal.
+
+## Utilisation locale
+
+```bash
+python3 -m http.server 8000   # http://localhost:8000
 ```
 
-### Intersections dangereuses (`intersections.md`)
+En local aussi, les données sont lues sur GitHub : pour essayer une
+modification avant de la pousser, utiliser les boutons de chargement manuel.
 
-```markdown
-## Nom de l'intersection
-type: 1
-45.52446, -73.58951
-```
+## Architecture
 
-## Types de pistes
+| Fichier | Rôle |
+|---|---|
+| `index.html` | Page de la carte |
+| `confidentialite.html` | Politique de confidentialité (avec mode sombre) |
+| `app.js` | Carte Leaflet, lecture des fichiers Markdown, légende, panneau, définitions des types |
+| `style.css` | Jetons du `:root`, redéfinis pour le mode sombre |
+| `pistes.md`, `intersections.md` | Données (voir [DONNEES.md](DONNEES.md)) |
+| `types-pistes.md` | Liste de référence des types de pistes |
+| `favicon.svg`, `apple-touch-icon.png` | Icônes |
 
-| Type | Description |
-|------|-------------|
-| 1a | Chaussée désignée |
-| 1b | Chaussée désignée dans les deux sens |
-| 1c | Trottoir permettant la circulation à vélo |
-| 2a | Chaussée désignée + bande cyclable en sens inverse |
-| 2b | Chaussée désignée + bande cyclable en sens inverse (protégée) |
-| 3a | Vélo rue unidirectionnelle |
-| 3b | Vélo rue bidirectionnelle |
-| 4a | Bande cyclable dans le sens des voitures seulement |
-| 4b | Bande cyclable à sens inverse seulement |
-| 5a | Bandes cyclables dans chaque direction, collées sur stationnement |
-| 5b | Bandes cyclables dans chaque direction, sans stationnement, ou avec espacement |
-| 5c | Bandes cyclables dans chaque direction, avec une certaine protection |
-| 6a | Piste bidirectionnelle |
-| 6b | Piste bidirectionnelle protégée |
-| 6c | Piste bidirectionnelle partagée avec piétons |
-| 7  | Piste unidirectionnelle protégée |
-| 8  | Deux pistes unidirectionnelles protégées |
+Carte au [système de design des cartes](../MAP-DESIGN-SYSTEM.md), section
+« Mode sombre » comprise. `package.json` ne sert qu'à `npx serve .`, une autre
+façon de lancer un serveur local : aucune dépendance npm.
 
-Les types à sens unique (1a, 3a, 4a, 4b, 7) affichent des flèches directionnelles sur la carte.
+## Publication
 
-## Types d'intersections dangereuses
-
-| Type | Description |
-|------|-------------|
-| 1 | Intersection non gérée |
-| 2 | Absence de cycle protégé |
-
-## Fonctionnalités
-
-- **Carte interactive** — fond OpenStreetMap, vue centrée sur le Plateau-Mont-Royal
-- **Légende dynamique** — construite automatiquement depuis les définitions de types, incluant pistes et intersections
-- **Panneau latéral** — liste cliquable des pistes et des intersections ; cliquer sur un élément recentre la carte et ouvre le popup
-- **Intersections dangereuses** — marqueurs circulaires sur la carte, avec popup descriptif et liste dédiée dans le panneau
-- **Mise à l'échelle au zoom** — épaisseur des polylignes et rayon des cercles s'ajustent dynamiquement selon le niveau de zoom
-- **Interface responsive** — sur mobile, le panneau latéral se ferme/ouvre via un bouton burger, avec un overlay de fond
-- **Chargement de fichiers** — boutons séparés pour charger manuellement `pistes.md` et `intersections.md`
-
-## Mode sombre
-
-La carte suit le mode clair ou sombre de l'appareil, selon la recette commune des cartes (`~/Developer/MAP-DESIGN-SYSTEM.md`, section « Mode sombre »). Toutes les couleurs de surface et de texte passent par les jetons du `:root` de `style.css`, redéfinis dans le bloc `@media (prefers-color-scheme: dark)`. Les couleurs des types de pistes ne changent pas (elles font la légende) : en sombre, un halo clair (`--line-halo`) garde visibles les tracés foncés (6b, 8). La page de confidentialité a aussi son mode sombre.
-
-## Technologies
-
-- [Leaflet](https://leafletjs.com/) — rendu de carte
-- [leaflet-polylinedecorator](https://github.com/bbecquet/Leaflet.PolylineDecorator) — flèches directionnelles
-- OpenStreetMap — fond de carte
-- [GoatCounter](https://www.goatcounter.com) — statistiques de visite anonymes, sans cookies
+GitHub Pages, branche `main`, domaine dans `CNAME`. (Ce site n'a pas encore
+le numéro de version x.y.z des autres sites.)
 
 ## Confidentialité
 
-Aucun cookie ni compte. Les fichiers chargés avec les boutons « Charger » restent
-dans le navigateur. Détails : [confidentialite.html](confidentialite.html), à mettre
-à jour (avec sa date) si un service externe est ajouté.
+Aucun cookie ni compte.
+
+| Quand | Ce qui est envoyé | À qui |
+|---|---|---|
+| Chaque visite | Page, site d'origine, appareil, pays | GoatCounter (mesure d'audience anonyme) |
+| Chaque visite | Lecture de `pistes.md` et `intersections.md` | GitHub (`raw.githubusercontent.com`) |
+| Chaque visite | Leaflet et son extension de flèches | unpkg |
+| Carte | Requêtes de tuiles de la zone affichée | OpenStreetMap |
+
+Les fichiers chargés avec les boutons « Charger » restent dans le navigateur.
+Détails : [confidentialite.html](confidentialite.html), à mettre à jour (avec
+sa date) si un service externe est ajouté.
+
+## Crédits
+
+- [Leaflet](https://leafletjs.com) 1.9.4 (BSD-2-Clause) et
+  [leaflet-polylinedecorator](https://github.com/bbecquet/Leaflet.PolylineDecorator)
+  1.6.0 (MIT), chargés depuis unpkg
+- Fond de carte © les contributeurs d'[OpenStreetMap](https://www.openstreetmap.org/copyright) (ODbL)
+
+## Auteur
+
+Développé par [Gabriel Fortin](https://gabfortin.com).
+
+## Documentation détaillée
+
+| Fichier | Contenu |
+|---|---|
+| [DONNEES.md](DONNEES.md) | Format de `pistes.md` et `intersections.md`, types de pistes et d'intersections |
+| [types-pistes.md](types-pistes.md) | Liste de référence des types de pistes |
