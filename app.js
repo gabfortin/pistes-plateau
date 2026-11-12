@@ -25,6 +25,7 @@ const TYPE_ORDER = ['1a', '1b', '1c', '2a', '2b', '3a', '3b', '4a', '4b', '5a', 
 const INTERSECTION_TYPES = {
   '1': { label: 'Intersection non gérée',   color: '#ef4444', dashArray: null, description: 'Aucun feu de circulation ni panneau d\'arrêt ne protège les déplacements cyclistes' },
   '2': { label: 'Absence de cycle protégé', color: '#c57d6d', dashArray: '5 4' },
+  '3': { label: 'Intersection non gérée avec créneau vélo', color: '#f59e0b', dashArray: null, description: 'Aucun feu de circulation ni panneau d\'arrêt, mais un créneau sans autos permet aux cyclistes de traverser' },
 };
 
 // ── Map setup ─────────────────────────────────────────────────────────────────

@@ -127,3 +127,4 @@ directionnelles sur la carte, dans l'ordre des points de `coords`.
 |------|-------------|
 | 1 | Intersection non gérée |
 | 2 | Absence de cycle protégé |
+| 3 | Intersection non gérée avec créneau vélo : aucun feu ni arrêt, mais un créneau sans autos permet de traverser (ex. Clark / Saint-Joseph) |
