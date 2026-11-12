@@ -1,0 +1,12 @@
+[
+  { "nom": "Hôtel-de-Ville / Saint-Joseph", "type": "1", "coord": [45.52446224086117, -73.58951577938262] },
+  { "nom": "Saint-André / Saint-Joseph", "type": "1", "coord": [45.528707858394036, -73.58564588565307] },
+  { "nom": "Saint-André / Mont-Royal", "type": "1", "coord": [45.526459736710784, -73.58068095325764] },
+  { "nom": "Saint-André / Rachel", "type": "1", "coord": [45.524287859239344, -73.57592922382459] },
+  { "nom": "Chabot / Saint-Joseph", "type": "1", "coord": [45.53637477875849, -73.57844317565825] },
+  { "nom": "Clark / Saint-Joseph", "type": "1", "coord": [45.52186974582115, -73.59184448087902] },
+  { "nom": "Clark / Mont-Royal", "type": "1", "coord": [45.5195748058812, -73.58685479533007] },
+  { "nom": "Clark / Rachel", "type": "1", "coord": [45.51750405344985, -73.5822435936724] },
+  { "nom": "Clark / Des Pins", "type": "1", "coord": [45.51456634744601, -73.57551995345595] },
+  { "nom": "Des Érables / Mont-Royal", "type": "1", "coord": [45.53576767378784, -73.57188136515745] }
+]

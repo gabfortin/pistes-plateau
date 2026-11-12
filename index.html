@@ -34,6 +34,11 @@
         <div class="gf-brand-sub">Le Plateau-Mont-Royal — <a href="https://gabfortin.com" target="_blank" rel="noopener">Gabriel Fortin</a></div>
       </div>
     </div>
+    <div class="gf-vue" role="group" aria-label="Réseau affiché">
+      <button type="button" class="gf-vue-btn active" data-vue="actuel" aria-pressed="true">Actuel</button>
+      <button type="button" class="gf-vue-btn" data-vue="a-venir" aria-pressed="false">À venir</button>
+      <button type="button" class="gf-vue-btn" data-vue="mandat" aria-pressed="false"><span class="lib-long">Mandat 2025-2029</span><span class="lib-court" aria-hidden="true">Mandat 25-29</span></button>
+    </div>
     <div class="gf-header-spacer"></div>
     <button class="gf-info-btn" id="gfInfoBtn" aria-label="À propos de cette carte" aria-haspopup="dialog">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -48,7 +53,8 @@
       <button class="gf-info-close" id="gfInfoClose" aria-label="Fermer">✕</button>
       <h2 id="gfInfoTitle">À propos de cette carte</h2>
       <p>Cette carte recense les aménagements cyclables du Plateau-Mont-Royal, classés par type (de la simple chaussée désignée jusqu'aux pistes unidirectionnelles protégées), ainsi que les intersections dangereuses pour les cyclistes.</p>
-      <p><strong>Données :</strong> relevé maison, publié sur <a href="https://github.com/gabfortin/pistes-plateau" target="_blank" rel="noopener">GitHub</a> (<code>pistes.md</code> et <code>intersections.md</code>). Fond de carte © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>.</p>
+      <p>La vue <strong>À venir</strong> ajoute aux pistes actuelles celles qui ont été adoptées en conseil mais ne sont pas encore construites (halo violet pointillé). La vue <strong>Mandat 2025-2029</strong> montre seulement les pistes construites pendant le mandat (saisons de travaux 2026 à 2029, le mandat ayant commencé en novembre 2025) et celles qui y sont prévues.</p>
+      <p><strong>Données :</strong> relevé maison, publié sur <a href="https://github.com/gabfortin/pistes-plateau" target="_blank" rel="noopener">GitHub</a> (<code>pistes.json</code>, <code>a-venir.json</code> et <code>intersections.json</code>). Fond de carte © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>.</p>
       <p>Carte réalisée par <a href="https://gabfortin.com" target="_blank" rel="noopener">Gabriel Fortin</a>, conseiller d'arrondissement au Plateau-Mont-Royal.</p>
       <p><a href="confidentialite.html">Politique de confidentialité</a></p>
     </div>
@@ -74,39 +80,57 @@
   <aside class="gf-sidebar" id="gfSidebar" aria-label="Légende et liste des pistes">
     <div class="gf-sidebar-header">
       <h2>Légende</h2>
+      <button type="button" class="gf-legend-tous" id="legend-tous">Tout masquer</button>
     </div>
     <div class="gf-legend" id="legend-items"></div>
 
     <div class="gf-sidebar-divider"></div>
     <div class="gf-sidebar-header">
-      <h2>Pistes <span class="gf-count" id="piste-count"></span></h2>
+      <h2><span id="piste-titre">Pistes</span> <span class="gf-count" id="piste-count"></span></h2>
     </div>
     <ul class="gf-sidebar-list" id="piste-list"></ul>
 
-    <div class="gf-sidebar-divider"></div>
-    <div class="gf-sidebar-header">
-      <h2>Intersections dangereuses <span class="gf-count" id="intersection-count"></span></h2>
+    <div class="gf-avenir-section">
+      <div class="gf-sidebar-divider"></div>
+      <div class="gf-sidebar-header">
+        <h2><span id="avenir-titre">Pistes à venir</span> <span class="gf-count" id="avenir-count"></span></h2>
+      </div>
+      <ul class="gf-sidebar-list" id="avenir-list"></ul>
     </div>
-    <ul class="gf-sidebar-list" id="intersection-list"></ul>
+
+    <div class="gf-intersections-section">
+      <div class="gf-sidebar-divider"></div>
+      <div class="gf-sidebar-header">
+        <h2>Intersections dangereuses <span class="gf-count" id="intersection-count"></span></h2>
+      </div>
+      <ul class="gf-sidebar-list" id="intersection-list"></ul>
+    </div>
 
     <div class="gf-sidebar-divider"></div>
     <div class="gf-sidebar-header">
       <h2>Charger un fichier</h2>
     </div>
     <div class="gf-file-labels">
-      <label class="gf-file-label" title="Charger un fichier pistes.md">
+      <label class="gf-file-label" title="Charger un fichier pistes.json">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
         </svg>
         Pistes
-        <input type="file" id="file-input" accept=".md" />
+        <input type="file" id="file-input" accept=".json,application/json" />
       </label>
-      <label class="gf-file-label" title="Charger un fichier intersections.md">
+      <label class="gf-file-label" title="Charger un fichier a-venir.json">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        À venir
+        <input type="file" id="avenir-file-input" accept=".json,application/json" />
+      </label>
+      <label class="gf-file-label" title="Charger un fichier intersections.json">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
         </svg>
         Intersections
-        <input type="file" id="intersection-file-input" accept=".md" />
+        <input type="file" id="intersection-file-input" accept=".json,application/json" />
       </label>
     </div>
   </aside>

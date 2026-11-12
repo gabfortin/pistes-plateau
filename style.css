@@ -407,3 +407,65 @@ html, body {
 .gf-pop-row .v { font-weight: 600; color: var(--ink-900); display: flex; align-items: center; gap: 6px; text-align: right; }
 .gf-pop-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .gf-pop-note { margin: 8px 0 0; font-size: .78rem; line-height: 1.5; color: var(--ink-500); }
+
+/* ---------- Vues « Actuel » / « À venir » (barre du haut) ---------- */
+.gf-vue {
+  display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px;
+  background: var(--glass); border: 1px solid var(--glass-border); box-shadow: var(--shadow-soft);
+}
+.gf-vue-btn {
+  font: 600 .8rem/1 'Inter', sans-serif; color: var(--ink-700);
+  padding: 7px 14px; border: none; border-radius: 999px; background: transparent; cursor: pointer;
+  transition: background .18s var(--ease), color .18s var(--ease);
+}
+.gf-vue-btn:hover { color: var(--ink-900); background: var(--surface-hover); }
+.gf-vue-btn.active { color: #fff; background: linear-gradient(140deg, var(--brand-light), var(--brand-dark)); box-shadow: 0 4px 12px -4px var(--brand-glow); }
+.gf-vue-btn[data-vue="a-venir"].active { background: linear-gradient(140deg, #c084fc, #7e22ce); box-shadow: 0 4px 12px -4px rgba(126, 34, 206, .6); }
+.gf-vue-btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+@media (max-width: 760px) {
+  .gf-header { flex-wrap: wrap; }
+  .gf-brand { flex: 1 1 0; min-width: 0; }   /* le titre rétrécit : le bouton « i » reste sur la 1re ligne */
+  .gf-brand-text { min-width: 0; }
+  .gf-vue { order: 10; flex: 1 1 100%; }
+  .gf-vue-btn { flex: 1 1 0; }
+}
+
+/* Section et légende des pistes à venir : visibles seulement dans la vue « À venir » */
+.gf-avenir-section, .legend-avenir { display: none; }
+body.vue-a-venir .gf-avenir-section { display: block; }
+body.vue-a-venir .legend-avenir { display: flex; }
+.legend-line-avenir {
+  height: 6px;
+  background: repeating-linear-gradient(to right, #a855f7 0 3px, transparent 3px 9px);
+  box-shadow: 0 0 0 1px rgba(168, 85, 247, .25);
+}
+.gf-pop-eyebrow.avenir { color: #7e22ce; background: rgba(168, 85, 247, .14); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .gf-pop-eyebrow.avenir { color: #d8b4fe; background: rgba(168, 85, 247, .2); }
+}
+.gf-file-labels { flex-wrap: wrap; }
+
+/* Vue « Mandat 2025-2029 » : seulement les nouvelles pistes */
+.gf-vue-btn[data-vue="mandat"].active { background: linear-gradient(140deg, #34d399, #047857); box-shadow: 0 4px 12px -4px rgba(4, 120, 87, .6); }
+body.vue-mandat .gf-intersections-section,
+body.vue-mandat .legend-separator,
+body.vue-mandat .legend-intersection { display: none; }
+@media (max-width: 760px) { .gf-vue-btn { padding: 7px 8px; font-size: .76rem; } }
+.gf-vue-btn .lib-court { display: none; }
+@media (max-width: 760px) {
+  .gf-vue-btn .lib-long { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+  .gf-vue-btn .lib-court { display: inline; }
+}
+
+/* Filtre par type : cases dans la légende */
+.legend-filtre { cursor: pointer; transition: background .18s var(--ease); }
+.legend-filtre:hover { background: var(--surface-hover); }
+.legend-filtre input { width: 15px; height: 15px; margin: 0; flex-shrink: 0; accent-color: var(--brand-dark); cursor: pointer; }
+.legend-filtre:has(input:not(:checked)) .legend-line-wrap,
+.legend-filtre:has(input:not(:checked)) .legend-label { opacity: .4; }
+.legend-filtre:has(input:focus-visible) { outline: 2px solid var(--brand); outline-offset: 1px; }
+.gf-legend-tous {
+  font: 600 .72rem/1 'Inter', sans-serif; color: var(--brand-ink);
+  background: none; border: none; padding: 4px 6px; border-radius: 6px; cursor: pointer;
+}
+.gf-legend-tous:hover { text-decoration: underline; }
