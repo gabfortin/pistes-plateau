@@ -16,9 +16,11 @@ const TYPE_DEFINITIONS = {
   '6c': { label: 'Piste bidirectionnelle partagée avec piétons',                                 color: '#a3e635', weight: 6, dashArray: null   },
   '7':  { label: 'Piste unidirectionnelle protégée',                                             color: '#0891b2', weight: 6, dashArray: null,   arrow: true },
   '8':  { label: 'Deux pistes unidirectionnelles protégées',                                     color: '#164e63', weight: 8, dashArray: null   },
+  // Piste à venir dont l'aménagement n'est pas encore décidé ("type": null dans a-venir.json)
+  '?':  { label: 'Type à déterminer',                                                            color: '#94a3b8', weight: 5, dashArray: '2 6' },
 };
 
-const TYPE_ORDER = ['1a', '1b', '1c', '2a', '2b', '3a', '3b', '4a', '4b', '5a', '5b', '5c', '6a', '6b', '6c', '7', '8'];
+const TYPE_ORDER = ['1a', '1b', '1c', '2a', '2b', '3a', '3b', '4a', '4b', '5a', '5b', '5c', '6a', '6b', '6c', '7', '8', '?'];
 
 const INTERSECTION_TYPES = {
   '1': { label: 'Intersection non gérée',   color: '#ef4444', dashArray: null, description: 'Aucun feu de circulation ni panneau d\'arrêt ne protège les déplacements cyclistes' },
@@ -118,12 +120,12 @@ function lirePistes(json, aVenir = false) {
     .filter((p) => p && typeof p.nom === 'string' && Array.isArray(p.coords) && p.coords.filter(estCoord).length >= 2)
     .map((p) => ({
       name: p.nom.trim(),
-      type: String(p.type ?? '').toLowerCase(),
+      type: p.type == null || p.type === '' ? '?' : String(p.type).toLowerCase(),   // '?' = type à déterminer
       coords: p.coords.filter(estCoord),
       aVenir,
       adoption: p.adoption || null,     // date d'adoption en conseil (AAAA-MM-JJ)
-      prevu: p.prevu || null,           // année de construction prévue (pistes à venir)
-      annee: p.annee || null,           // année de construction (pistes réalisées)
+      prevu: p.prevu || null,           // construction prévue (pistes à venir) : 2027 ou un texte comme « été 2029 »
+      annee: p.annee || null,           // construction (pistes réalisées) : 2026 ou un texte comme « août 2026 »
       source: p.source || null,         // résolution, lien ou document
       remplace: Array.isArray(p.remplace) ? p.remplace : [],   // noms de pistes actuelles remplacées
     }));
@@ -281,7 +283,7 @@ function renderPistes(pistes) {
 
     polylineRefs.push({ glow: glowLine, main: mainLine, highlight: highlightLine, baseWeight: def.weight });
     mainLine.bindPopup(`
-      ${piste.aVenir ? '<div class="gf-pop-eyebrow avenir">À venir · adoptée en conseil</div>' : `<div class="gf-pop-eyebrow">Type ${echapper(piste.type)}</div>`}
+      ${piste.aVenir ? '<div class="gf-pop-eyebrow avenir">À venir · adoptée en conseil</div>' : `<div class="gf-pop-eyebrow">${piste.type === '?' ? 'Type à déterminer' : `Type ${echapper(piste.type)}`}</div>`}
       <h3 class="gf-pop-name">${echapper(piste.name)}</h3>
       <div class="gf-pop-row"><span class="k">Aménagement</span><span class="v"><span class="gf-pop-dot" style="background:${def.color}"></span>${echapper(def.label)}</span></div>
       ${!piste.aVenir && piste.annee ? `<div class="gf-pop-row"><span class="k">Construite en</span><span class="v">${echapper(piste.annee)}</span></div>` : ''}
@@ -328,7 +330,7 @@ function renderPistes(pistes) {
 
     const badge = document.createElement('span');
     badge.className = 'piste-type-badge';
-    badge.textContent = `T${piste.type}`;
+    badge.textContent = piste.type === '?' ? 'T ?' : `T${piste.type}`;
 
     li.appendChild(dot);
     li.appendChild(nameEl);
@@ -383,7 +385,7 @@ function buildLegend() {
 
     const label = document.createElement('span');
     label.className = 'legend-label';
-    label.textContent = `${typeNum}. ${def.label}`;
+    label.textContent = typeNum === '?' ? def.label : `${typeNum}. ${def.label}`;
     if (def.arrow) {
       const arrow = document.createElement('span');
       arrow.className = 'legend-arrow';
@@ -515,7 +517,9 @@ const AVENIR_COLOR = '#a855f7';
 // les pistes construites (annee) ou prévues (prevu) de 2026 à 2029. Une piste de 2025 relève du mandat précédent.
 const MANDAT = { label: 'Mandat 2025-2029', premiereAnnee: 2026, derniereAnnee: 2029 };
 const VUES = ['actuel', 'a-venir', 'mandat'];
-const dansMandat = (an) => Number.isInteger(+an) && +an >= MANDAT.premiereAnnee && +an <= MANDAT.derniereAnnee;
+// annee / prevu : un nombre (2027) ou un texte qui contient l'année (« été 2029 », « août 2026 »)
+const anneeDe = (v) => { const m = /\b(\d{4})\b/.exec(String(v ?? '')); return m ? +m[1] : null; };
+const dansMandat = (v) => { const an = anneeDe(v); return an !== null && an >= MANDAT.premiereAnnee && an <= MANDAT.derniereAnnee; };
 const donnees = { actuelles: [], aVenir: [] };
 let vue = VUES.includes(new URLSearchParams(location.search).get('vue')) ? new URLSearchParams(location.search).get('vue') : 'actuel';
 

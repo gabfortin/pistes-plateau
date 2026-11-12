@@ -33,8 +33,9 @@ coordonnées recopiées telles quelles) ; ils restent dans l'historique git.
 
 ## Pistes actuelles (`pistes.json`)
 
-`annee` (facultatif) : année de construction, affichée « Construite en » dans
-le popup et utilisée par la vue « Mandat ». Inconnue pour les pistes plus
+`annee` (facultatif) : construction, une année (`2026`) ou un texte qui la
+contient (`"août 2026"`), affichée « Construite en » dans le popup ; la vue
+« Mandat » en lit l'année. Inconnue pour les pistes plus
 anciennes : à ajouter au moins pour celles construites depuis 2026.
 
 ```json
@@ -74,8 +75,8 @@ Mêmes champs, plus des champs facultatifs :
 
 | Champ | Obligatoire | Rôle |
 |---|---|---|
-| `nom`, `type`, `coords` | oui | Comme pour les pistes actuelles. `type` = l'aménagement prévu |
-| `prevu` | non | Année de construction prévue, affichée « Construction prévue » dans le popup |
+| `nom`, `type`, `coords` | oui | Comme pour les pistes actuelles. `type` = l'aménagement prévu ; `null` s'il n'est pas encore décidé (affiché « Type à déterminer », gris pointillé, avec sa case dans la légende) |
+| `prevu` | non | Construction prévue : une année (`2027`) ou un texte qui la contient (`"été 2029"`), affiché tel quel dans le popup ; la vue « Mandat » en lit l'année |
 | `trace` | non | Provenance du tracé quand il ne vient pas du relevé (ex. axe de la rue dans la Géobase) ; non affiché |
 | `adoption` | non | Date d'adoption en conseil (`AAAA-MM-JJ`), affichée « 2 juin 2026 » dans le popup |
 | `source` | non | Résolution ou document ; une adresse `https://…` devient un lien « Voir » |
