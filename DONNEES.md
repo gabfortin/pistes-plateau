@@ -33,6 +33,11 @@ coordonnées recopiées telles quelles) ; ils restent dans l'historique git.
 
 ## Pistes actuelles (`pistes.json`)
 
+`trace` (facultatif, non affiché) : provenance du tracé quand il ne vient pas
+du relevé. Hochelaga (Fullum – Du Havre, Du Havre – Desjardins) et Ontario
+(Saint-Urbain – Berri), ajoutées le 13 novembre 2026, suivent l'axe de la rue
+dans la Géobase entre les carrefours nommés (pas le côté exact de la piste).
+
 `annee` (facultatif) : construction, une année (`2026`) ou un texte qui la
 contient (`"août 2026"`), affichée « Construite en » dans le popup ; la vue
 « Mandat » en lit l'année. Inconnue pour les pistes plus
