@@ -996,14 +996,16 @@
     ]
   },
   {
-    "nom": "Ontario (Saint-Urbain – Berri)",
+    "nom": "Ontario (Saint-Urbain – Atateken)",
     "trace": "Axe de la rue dans la Géobase (12 novembre 2026), pas un relevé",
     "type": "6a",
     "coords": [
       [45.509914, -73.567444],
       [45.511321, -73.566749],
       [45.516468, -73.56507],
-      [45.51689, -73.56487]
+      [45.51689, -73.56487],
+      [45.517093, -73.56475],
+      [45.520159, -73.562942]
     ]
   }
 ]
