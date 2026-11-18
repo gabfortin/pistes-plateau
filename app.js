@@ -33,10 +33,7 @@ const INTERSECTION_TYPES = {
 const map = L.map('map', { zoomControl: false }).setView([45.5202, -73.5862], 14);
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  maxZoom: 19,
-}).addTo(map);
+// Fond de carte : OpenFreeMap (données OpenStreetMap), posé par le composant vendor/carte/ avec son crédit
 
 const headerEl = document.querySelector('.gf-header');
 const isMobile = () => window.matchMedia('(max-width: 760px)').matches;

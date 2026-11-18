@@ -10,7 +10,7 @@ pour qui veut voir où le réseau est protégé ou non.
 
 | Élément | Ce qu'il fait |
 |---|---|
-| **Carte** | Fond OpenStreetMap centré sur le Plateau ; épaisseur des tracés et taille des cercles ajustées au zoom ; flèches sur les types à sens unique (1a, 3a, 4a, 4b, 7) |
+| **Carte** | Fond OpenFreeMap (données OpenStreetMap) centré sur le Plateau ; épaisseur des tracés et taille des cercles ajustées au zoom ; flèches sur les types à sens unique (1a, 3a, 4a, 4b, 7) |
 | **Légende et filtre par type** | Construite à partir des définitions de types ; une case par type de piste (et « Tout masquer / Tout afficher ») masque ses pistes dans les trois vues, listes et compteurs compris |
 | **Panneau latéral** | Liste cliquable des pistes et des intersections : un clic recentre la carte et ouvre le popup ; repliable (burger) sur mobile |
 | **Intersections dangereuses** | Marqueurs circulaires avec popup descriptif et liste dédiée |
@@ -29,7 +29,7 @@ foncés (6b, 8).
 |---|---|---|
 | `pistes.json`, `intersections.json` | Relevé de Gabriel Fortin, écrit à la main | Tracés des pistes et intersections dangereuses |
 | `a-venir.json` | Fourni par Gabriel Fortin (pistes adoptées en conseil) | Vue « À venir » |
-| [OpenStreetMap](https://www.openstreetmap.org) | Contributeurs d'OpenStreetMap, ODbL | Fond de carte |
+| [OpenFreeMap](https://openfreemap.org) ([OpenStreetMap](https://www.openstreetmap.org)) | OpenMapTiles ; contributeurs d'OpenStreetMap, ODbL | Fond de carte |
 
 ### Mise à jour
 
@@ -83,8 +83,7 @@ Aucun cookie ni compte.
 | Quand | Ce qui est envoyé | À qui |
 |---|---|---|
 | Chaque visite | Page, site d'origine, appareil, pays | GoatCounter (mesure d'audience anonyme) |
-| Chaque visite | Leaflet et son extension de flèches | unpkg |
-| Carte | Requêtes de tuiles de la zone affichée | OpenStreetMap |
+| Chaque visite | Fond de carte de la zone affichée | OpenFreeMap |
 
 Les fichiers chargés avec les boutons « Charger » restent dans le navigateur.
 Détails : [confidentialite.html](confidentialite.html), à mettre à jour (avec
@@ -92,10 +91,10 @@ sa date) si un service externe est ajouté.
 
 ## Crédits
 
-- [Leaflet](https://leafletjs.com) 1.9.4 (BSD-2-Clause) et
-  [leaflet-polylinedecorator](https://github.com/bbecquet/Leaflet.PolylineDecorator)
-  1.6.0 (MIT), chargés depuis unpkg
-- Fond de carte © les contributeurs d'[OpenStreetMap](https://www.openstreetmap.org/copyright) (ODbL)
+- Composant de carte commun (`vendor/carte/`, modèle `~/Developer/outils/communs/carte/`) :
+  API de Leaflet (flèches de `L.polylineDecorator` comprises) dessinée par
+  [MapLibre GL JS](https://maplibre.org) (BSD-3-Clause) ; fond [OpenFreeMap](https://openfreemap.org),
+  © [OpenMapTiles](https://www.openmaptiles.org), données © [OpenStreetMap](https://www.openstreetmap.org/copyright)
 
 ## Auteur
 
