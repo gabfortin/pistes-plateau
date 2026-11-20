@@ -1,0 +1,12 @@
+{
+  "fichier": "version.txt",
+  "donnees": [
+    "pistes.json",
+    "a-venir.json",
+    "intersections.json"
+  ],
+  "pages": [
+    "index.html",
+    "confidentialite.html"
+  ]
+}

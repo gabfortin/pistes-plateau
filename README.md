@@ -76,8 +76,10 @@ façon de lancer un serveur local : aucune dépendance npm.
 
 ## Publication
 
-GitHub Pages, branche `main`, domaine dans `CNAME`. (Ce site n'a pas encore
-le numéro de version x.y.z des autres sites.)
+GitHub Pages, branche `main`, domaine dans `CNAME`. Numéro de version x.y.z
+(`version.txt`, `.version.json`) mis à jour par le hook `pre-commit` à chaque
+commit, avec les `?v=` des CSS et JS de `index.html` et `confidentialite.html`
+(pas encore affiché dans le bas de page).
 
 ## Confidentialité
 
