@@ -66,6 +66,8 @@ en rechargeant la page.
 | `pistes.json`, `a-venir.json`, `intersections.json` | Données (voir [DONNEES.md](DONNEES.md)) |
 | `types-pistes.md` | Liste de référence des types de pistes |
 | `favicon.svg`, `apple-touch-icon.png` | Icônes |
+| `fonts/` | Polices Inter et Poppins hébergées avec le site, et `polices.css` qui les déclare (copies de `outils/communs/polices/`, pas de Google Fonts) |
+| `img/Gabriel Fortin.jpg` | Photo de la signature (JPEG, 80 Ko) |
 
 Carte au [système de design des cartes](../MAP-DESIGN-SYSTEM.md), section
 « Mode sombre » comprise. `package.json` ne sert qu'à `npx serve .`, une autre
