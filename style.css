@@ -222,8 +222,12 @@ html, body {
   .gf-info-btn svg { width: 14px; height: 14px; }
 }
 
+/* « i » à 8 px du bouton « Me supporter » (MAP-DESIGN-SYSTEM.md) : l'écart de la barre est de 14 px */
+.gf-don-btn + .gf-info-btn { margin-left: -6px; }
+
 @media (max-width: 760px) {
   .gf-header { top: 10px; left: 10px; right: 10px; padding: 10px 14px; gap: 8px 10px; flex-wrap: nowrap; }
+  .gf-don-btn + .gf-info-btn { margin-left: -2px; }
   .gf-brand { flex: 1 1 auto; gap: 10px; }
   .gf-brand-mark { width: 34px; height: 34px; }
   .gf-brand-sub { overflow: hidden; text-overflow: ellipsis; }
